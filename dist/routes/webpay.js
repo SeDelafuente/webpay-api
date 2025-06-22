@@ -1,12 +1,19 @@
-import express from 'express';
+import { Router } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
-const router = express.Router();
+const router = Router();
 const TBK_API_KEY_ID = process.env.TBK_API_KEY_ID;
 const TBK_API_KEY_SECRET = process.env.TBK_API_KEY_SECRET;
 const BASE_URL = process.env.WEBPAY_API_URL;
 const RETURN_URL = process.env.RETURN_URL;
+router.get('/redirect', (req, res) => {
+    console.log('🟢 GET /redirect recibida con query:', req.query);
+    const token = req.query.token_ws;
+    const uri = `${process.env.APP_SCHEME}://${process.env.APP_HOST}?token_ws=${encodeURIComponent(token)}`;
+    console.log('🟢 Redirigiendo a URI:', uri);
+    return res.redirect(uri);
+});
 router.post('/create', async (req, res) => {
     var _a;
     try {
@@ -89,5 +96,11 @@ router.get('/status/:token', async (req, res) => {
         }
         res.status(status).json({ error: 'Error consultando estado', details: data });
     }
+});
+router.post('/redirect', (req, res) => {
+    const { token_ws } = req.body;
+    const uri = `${process.env.APP_SCHEME}://${process.env.APP_HOST}`
+        + `?token_ws=${encodeURIComponent(token_ws)}`;
+    return res.redirect(uri);
 });
 export default router;
