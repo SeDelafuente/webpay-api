@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import webpayRoutes from './routes/webpay.js';
+import notificacionRoutes from './routes/notificacion.js';  
 
 dotenv.config();
 
@@ -12,8 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/webpay', webpayRoutes);
+app.use('/api/notificacion', notificacionRoutes);
 
-// index.ts (add these lines)
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 }).on('error', (err: Error) => { // <-- Add this .on('error') handler
